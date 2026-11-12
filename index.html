@@ -1,1 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TerminaAI CloseDesk - Demo for ISOs</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Inter,system-ui,sans-serif;background:#07110e;color:#e8f5ee}
+.card{background:#0e1f18;border:1px solid #1e3a2d;border-radius:16px}
+input[type=range]{width:100%;accent-color:#10b981}
+.tabbtn{padding:10px 14px;border-radius:999px;background:#0e1f18}
+.tabbtn.active{background:#10b981;color:#04120c;font-weight:700}
+</style>
+</head>
+<body>
+<div class="max-w-6xl mx-auto px-4 py-6">
 
+<header class="flex flex-wrap justify-between items-center gap-3">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center text-xl font-black text-black">T</div>
+<div><h1 class="text-2xl font-black">TerminaAI <span class="text-emerald-400">CloseDesk</span></h1>
+<p class="text-xs text-emerald-200/70">The Live Deal-Closer for Terminal Sellers - ISOs / MSPs</p></div>
+</div>
+<a href="#pricing" class="bg-amber-400 text-black font-bold px-4 py-2 rounded-full">Book ISO Demo</a>
+</header>
+
+<nav class="flex gap-2 mt-6 flex-wrap">
+<button class="tabbtn active" onclick="show('roi',this)">1 - ROI Calculator</button>
+<button class="tabbtn" onclick="show('copilot',this)">2 - Live Copilot</button>
+<button class="tabbtn" onclick="show('ocr',this)">3 - Statement OCR</button>
+<button class="tabbtn" onclick="show('proposal',this)">4 - Proposal</button>
+<button class="tabbtn" onclick="show('admin',this)">5 - Owner Control</button>
+</nav>
+
+<!-- ROI -->
+<section id="roi" class="mt-6 grid md:grid-cols-2 gap-4">
+<div class="card p-5">
+<h2 class="font-bold text-lg">Executive Pitch & ROI Model</h2>
+<p class="text-sm text-white/60">Move sliders - watch the numbers live.</p>
+<div class="mt-4 space-y-4 text-sm">
+<label>Reps: <b id="vReps">10</b><input type="range" id="reps" min="1" max="50" value="10" oninput="calc()"></label>
+<label>Daily Dials / Rep: <b id="vDials">80</b><input type="range" id="dials" min="20" max="200" value="80" oninput="calc()"></label>
+<label>Close Rate %: <b id="vClose">4%</b><input type="range" id="close" min="1" max="15" value="4" oninput="calc()"></label>
+<label>Avg Upfront Commission $: <b id="vComm">$650</b><input type="range" id="comm" min="200" max="1500" step="50" value="650" oninput="calc()"></label>
+<label>Monthly Residual / Deal $: <b id="vRes">$45</b><input type="range" id="res" min="20" max="150" value="45" oninput="calc()"></label>
+<label><input type="checkbox" id="lift" checked onchange="calc()"> With TerminaAI: +35% close-rate lift</label>
+</div></div>
+<div class="grid grid-cols-2 gap-3">
+<div class="card p-4"><p class="text-xs text-white/60">Monthly Deals</p><p class="text-3xl font-black text-emerald-400" id="deals">-</p></div>
+<div class="card p-4"><p class="text-xs text-white/60">Monthly Upfront</p><p class="text-3xl font-black" id="upfront">-</p></div>
+<div class="card p-4"><p class="text-xs text-white/60">Monthly Residual</p><p class="text-3xl font-black" id="residual">-</p></div>
+<div class="card p-4"><p class="text-xs text-white/60">Cost @ $149/rep</p><p class="text-3xl font-black text-amber-300" id="cost">-</p></div>
+<div class="card p-4 col-span-2"><p class="text-xs text-white/60">Net Monthly ROI</p><p class="text-4xl font-black text-emerald-400" id="roiOut">-</p><p class="text-sm mt-1" id="payback"></p></div>
+</div></section>
+
+<!-- COPILOT -->
+<section id="copilot" class="mt-6 hidden grid md:grid-cols-2 gap-4">
+<div class="card p-5">
+<div class="flex justify-between"><b>Live Call - Maria's Pizza</b><span id="timer" class="text-emerald-400 font-mono">00:00</span></div>
+<p class="text-xs text-white/60 mt-1">Status: Connected - Coaching Score: <b id="score">92</b>/100</p>
+<div class="bg-black/40 rounded-xl p-3 mt-3 text-sm min-h-[120px]" id="transcript"><p class="text-white/50">Rep: Hi Maria, I help restaurants cut card fees - do you have 60 seconds?</p><p class="text-white/50">Maria: I'm busy, and I'm happy with 【entity-Square¦canonical_name=Square】...</p></div>
+<div class="flex flex-wrap gap-2 mt-3">
+<button onclick="objection('【entity-square¦canonical_name=Square】')" class="bg-white/10 px-3 py-2 rounded-full text-sm">I'm happy with 【entity-Square¦canonical_name=Square】</button>
+<button onclick="objection('clover')" class="bg-white/10 px-3 py-2 rounded-full text-sm">Locked in Clover 36-mo</button>
+<button onclick="objection('rates')" class="bg-white/10 px-3 py-2 rounded-full text-sm">My rates are already low</button>
+<button onclick="objection('send')" class="bg-white/10 px-3 py-2 rounded-full text-sm">Just send me something</button>
+</div></div>
+<div class="card p-5"><h3 class="font-bold">AI Teleprompter - Say This Next</h3>
+<div id="coach" class="mt-3 text-sm leading-relaxed bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-3">Click an objection on the left. Copilot will give you the exact rebuttal + next question.</div>
+<p class="text-xs text-amber-300 mt-3">Compliance: Never promise savings without a statement.</p></div></section>
+
+<!-- OCR -->
+<section id="ocr" class="mt-6 hidden">
+<div class="card p-5"><h3 class="font-bold text-lg">5-Second Statement OCR - Click a processor</h3>
+<div class="flex flex-wrap gap-2 mt-3">
+<button onclick="parseOCR('【entity-Square¦canonical_name=Square】')" class="bg-white text-black font-bold px-4 py-2 rounded-full">【entity-Square¦canonical_name=Square】</button>
+<button onclick="parseOCR('Clover')" class="bg-emerald-500 font-bold px-4 py-2 rounded-full">Clover</button>
+<button onclick="parseOCR('Toast')" class="bg-amber-400 text-black font-bold px-4 py-2 rounded-full">Toast</button>
+<button onclick="parseOCR('First Data')" class="bg-white/20 font-bold px-4 py-2 rounded-full">First Data</button>
+</div>
+<div id="ocrOut" class="grid md:grid-cols-3 gap-3 mt-4 text-sm"><div class="card p-4 col-span-3 text-white/60">Select a statement above to parse it instantly.</div></div></div></section>
+
+<!-- PROPOSAL -->
+<section id="proposal" class="mt-6 hidden grid md:grid-cols-2 gap-4">
+<div class="card p-5 space-y-3"><h3 class="font-bold">1-Click Proposal Generator</h3>
+<input id="mName" value="Maria's Pizza" class="w-full bg-black/40 p-3 rounded-xl">
+<input id="mVol" value="85000" type="number" class="w-full bg-black/40 p-3 rounded-xl">
+<input id="mRate" value="2.15" step="0.01" class="w-full bg-black/40 p-3 rounded-xl">
+<p class="text-xs text-white/60">Merchant - Monthly Volume ($) - Your Proposed Rate (%)</p>
+<button onclick="genProposal()" class="w-full bg-emerald-500 text-black font-bold py-3 rounded-xl">Generate Proposal</button>
+<button onclick="alert('SMS pitch copied!')" class="w-full bg-white/10 py-3 rounded-xl">Copy SMS Pitch</button></div>
+<div class="card p-5 bg-white text-black"><h4 class="font-black text-xl">Savings Proposal</h4><p id="pOut" class="mt-3 text-sm">Click Generate Proposal.</p>
+<div class="border-t mt-4 pt-3 flex justify-between text-sm"><span>Merchant Signature</span><span>___________________</span></div></div></section>
+
+<!-- ADMIN -->
+<section id="admin" class="mt-6 hidden"><div class="card p-5"><h3 class="font-bold">Owner Control Center</h3>
+<div class="grid md:grid-cols-2 gap-3 mt-3 text-sm">
+<label class="flex justify-between bg-black/30 p-3 rounded-xl">Require Statement Before Quote <input type="checkbox" checked></label>
+<label class="flex justify-between bg-black/30 p-3 rounded-xl">Block Unapproved Savings Claims <input type="checkbox" checked></label>
+<label class="flex justify-between bg-black/30 p-3 rounded-xl">Record Calls <input type="checkbox" checked></label>
+<label class="flex justify-between bg-black/30 p-3 rounded-xl">CRM Sync - 【entity-HubSpot¦canonical_name=HubSpot】 / 【entity-Salesforce¦canonical_name=Salesforce】 <input type="checkbox" checked></label>
+</div></div></section>
+
+<section id="pricing" class="mt-8 grid md:grid-cols-3 gap-4">
+<div class="card p-5"><b>Solo</b><p class="text-3xl font-black mt-2">$99<span class="text-sm">/mo</span></p><p class="text-sm text-white/60">1 rep - Copilot + OCR + Proposals</p></div>
+<div class="card p-5 border-amber-400 border-2"><b class="text-amber-300">Team - Most Popular</b><p class="text-3xl font-black mt-2">$149<span class="text-sm">/rep/mo</span></p><p class="text-sm text-white/60">Full team - Leaderboard - Control Center</p></div>
+<div class="card p-5"><b>ISO White-Label</b><p class="text-3xl font-black mt-2">$999<span class="text-sm">/mo</span></p><p class="text-sm text-white/60">Your logo, your domain, your pricing</p></div></section>
+<footer class="text-center text-xs text-white/40 py-6">TerminaAI CloseDesk - Demo - No real merchant data. For sales demo only.</footer>
+</div>
+
+<script>
+function show(id,btn){document.querySelectorAll('section[id]').forEach(s=>{if(['roi','copilot','ocr','proposal','admin'].includes(s.id)) s.classList.add('hidden')});document.getElementById(id).classList.remove('hidden');document.querySelectorAll('.tabbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}
+function calc(){let r=+document.getElementById('reps').value,d=+document.getElementById('dials').value,c=+document.getElementById('close').value,comm=+document.getElementById('comm').value,res=+document.getElementById('res').value;let lift=document.getElementById('lift').checked?1.35:1;let eff=c*lift;document.getElementById('vReps').textContent=r;document.getElementById('vDials').textContent=d;document.getElementById('vClose').textContent=c+'%';document.getElementById('vComm').textContent='$'+comm;document.getElementById('vRes').textContent='$'+res;let deals=Math.round(r*d*22*(eff/100));let up=deals*comm;let resid=deals*res;let cost=r*149;document.getElementById('deals').textContent=deals;document.getElementById('upfront').textContent='$'+up.toLocaleString();document.getElementById('residual').textContent='$'+resid.toLocaleString();document.getElementById('cost').textContent='$'+cost.toLocaleString();document.getElementById('roiOut').textContent='$'+(up-cost).toLocaleString()+' ('+Math.round((up-cost)/cost*100)+'% ROI)';document.getElementById('payback').textContent='Effective close rate with TerminaAI: '+eff.toFixed(1)+'%'}calc();
+let sec=0;setInterval(()=>{sec++;let m=String(Math.floor(sec/60)).padStart(2,'0'),s=String(sec%60).padStart(2,'0');document.getElementById('timer').textContent=m+':'+s},1000);
+const scripts={square:{t:"Merchant: I'm happy with Square",r:"Totally get it - Square is simple. Most owners love the simplicity but don't realize they're paying 2.6% + 15c on every swipe. Can I show you in 30 seconds what that costs you per month - if it's not cheaper, I'll tell you to stay.",q:"Next: Roughly what do you process a month - $40k, $80k?"},clover:{t:"Merchant: I'm locked in a Clover 36-month contract",r:"That contract is exactly why I'm calling - most Clover contracts have a buyout window many owners miss. If I can show you math where savings pay the buyout in 2 months, would you look at your statement with me?",q:"Next: Do you have last month's statement handy? I'll audit it live."},rates:{t:"Merchant: My rates are already low",r:"You might be right - and if you are, I'll tell you. 7 out of 10 owners who told me that were paying hidden PCI + batch + debit penalty fees they never saw. Let me audit one statement - 5 seconds.",q:"Next: Can you snap a photo of page 1 of your statement?"},send:{t:"Merchant: Just send me something",r:"Happy to - but a generic PDF won't show YOUR savings. Give me 60 seconds with your statement and I'll send you a proposal with YOUR exact monthly savings, not a brochure. Fair?",q:"Next: What's the best number to text that proposal to?"}};
+function objection(k){let s=scripts[k];document.getElementById('transcript').innerHTML+='<p class="mt-2 text-amber-300">'+s.t+'</p>';document.getElementById('coach').innerHTML='<b>Say this:</b><br>'+s.r+'<br><br><b>'+s.q+'</b>';document.getElementById('score').textContent=94}
+const ocrData={【entity-Square¦canonical_name=Square】:{vol:'$62,000',rate:'2.89%',fees:'$184/mo',hidden:'PCI Non-Compliance $19.95 + Batch $0.25',save:'$412/mo'},Clover:{vol:'$85,000',rate:'2.71%',fees:'$249/mo',hidden:'Clover Lease $89 + PCI $29.95',save:'$587/mo'},Toast:{vol:'$118,000',rate:'2.64%',fees:'$312/mo',hidden:'Toast POS Sync $79 + Debit Penalty',save:'$731/mo'},'First Data':{vol:'$94,000',rate:'2.78%',fees:'$278/mo',hidden:'Annual Fee $149 + Statement Fee $14.95',save:'$654/mo'}};
+function parseOCR(k){let d=ocrData[k];document.getElementById('ocrOut').innerHTML='<div class="card p-4"><b>Parsed: '+k+'</b><p class="mt-2">Volume: '+d.vol+'<br>Effective Rate: '+d.rate+'<br>Monthly Fees: '+d.fees+'<br><span class="text-red-400">Hidden: '+d.hidden+'</span></p></div><div class="card p-4"><b>Your Offer</b><p class="mt-2">Proposed Rate: 2.15%<br>No hidden fees<br>No long contract</p></div><div class="card p-4 bg-emerald-500 text-black"><b>Savings</b><p class="text-2xl font-black mt-2">'+d.save+'</p><p>Annual: $'+(parseInt(d.save.replace(/[^0-9]/g,''))*12).toLocaleString()+'</p></div>'}
+function genProposal(){let n=document.getElementById('mName').value,v=+document.getElementById('mVol').value,r=+document.getElementById('mRate').value;let cur=v*0.0278,prop=v*(r/100),save=cur-prop;document.getElementById('pOut').innerHTML='<b>'+n+'</b><br>Monthly Volume: $'+v.toLocaleString()+'<br>Current Est. Cost (2.78%): $'+Math.round(cur).toLocaleString()+'/mo<br>Your Offer ('+r+'%): $'+Math.round(prop).toLocaleString()+'/mo<br><b class="text-emerald-600 text-lg">You Save: $'+Math.round(save).toLocaleString()+'/mo - $'+Math.round(save*12).toLocaleString()+'/yr</b><br><br>No hidden fees. No 36-month lock-in. Free terminal swap.'}
+</script>
+</body>
+</html>
